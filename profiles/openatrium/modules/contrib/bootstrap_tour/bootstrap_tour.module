@@ -205,6 +205,7 @@ function bootstrap_tour_load_file($type, $filename, $uri) {
  * Helper function to actually run a tour. Can be called from anywhere.
  */
 function bootstrap_tour_run_tour($id, $force = FALSE) {
+      global $user;                                                             //ITA patch
   $tour = bootstrap_tour_load($id);
 
   if (!bootstrap_tour_access($tour) || empty($tour->steps)) {
@@ -240,7 +241,7 @@ function bootstrap_tour_run_tour($id, $force = FALSE) {
   foreach($tour->steps as $key => &$step) {
     // If a path isn't specified, then use the path from the previous step.
     if ($step->path) {
-     $step_path = $step->path;
+     $step_path = $step->path = str_replace ('*', $user->uid,$step->path);  //ITA patch
     }
     else {
       $step->path = $step_path;
